@@ -75,13 +75,3 @@ curl -f http://localhost
 print_success "OK"
 stop_compose docker-compose-balanced-pharo-date.yml
 print_success "Test #6 - Current date balanced...[OK]"
-
-print_info "Test #7 - Current date balanced (Swarm)"
-docker swarm init
-docker stack deploy -c docker-compose-balanced-pharo-date-swarm.yml date-sut
-sleep 5
-curl -f http://localhost
-print_success "OK"
-docker stack rm date-sut
-docker swarm leave --force
-print_success "Test #7 - Current date balanced (Swarm)...[OK]"
