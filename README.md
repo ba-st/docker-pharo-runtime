@@ -1,6 +1,6 @@
 # Docker image for Pharo
 
-[![Unit Tests](https://github.com/ba-st/docker-pharo-runtime/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/ba-st/docker-pharo-runtime/actions/workflows/unit-tests.yml/badge.svg)
+[![Unit Tests](https://github.com/ba-st/docker-pharo-runtime/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/ba-st/docker-pharo-runtime/actions/workflows/unit-tests.yml)
 [![Docker Build](https://github.com/ba-st/docker-pharo-runtime/actions/workflows/docker-build.yml/badge.svg)](https://github.com/ba-st/docker-pharo-runtime/actions/workflows/docker-build.yml)
 [![Markdown Lint](https://github.com/ba-st/docker-pharo-runtime/actions/workflows/markdown-lint.yml/badge.svg)](https://github.com/ba-st/docker-pharo-runtime/actions/workflows/markdown-lint.yml)
 
