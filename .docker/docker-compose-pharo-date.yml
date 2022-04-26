@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  sut:
+    build:
+      context: pharo-date
+    ulimits:
+      rtprio:
+        soft: 2
+        hard: 2
+    ports:
+      - 8080:8080

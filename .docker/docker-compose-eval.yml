@@ -1,0 +1,9 @@
+version: '3.4'
+services:
+  sut:
+    image: pharo-runtime:sut
+    command: pharo eval 2+2
+    ulimits:
+      rtprio:
+        soft: 2
+        hard: 2

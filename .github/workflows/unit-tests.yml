@@ -1,0 +1,12 @@
+name: Unit Tests
+
+on: [push,pull_request,workflow_dispatch]
+
+jobs:
+   unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests using Docker
+        working-directory: .docker
+        run: ./docker-tests.sh
