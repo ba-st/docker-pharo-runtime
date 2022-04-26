@@ -1,0 +1,26 @@
+# Download Pharo Image in a clean image
+FROM alpine:3 as download-image
+RUN apk add unzip
+WORKDIR /tmp/pharo-images
+ADD https://files.pharo.org/image/100/Pharo10.0.0-0.build.512.sha.bfb3a61.arch.64bit.zip ./PharoImage.zip
+RUN set -eu; \
+  unzip PharoImage.zip; \
+  rm PharoImage.zip; \
+  mv *.image Pharo.image; \
+  mv *.changes Pharo.changes; \
+  true
+
+# Copy Pharo Image into base image
+FROM ghcr.io/ba-st/pharo-vm:v9.0.14 as image
+LABEL maintainer="Buenos Aires Smalltalk <github@fast.org.ar>"
+WORKDIR /opt/pharo
+USER root
+RUN set -eu; \
+  printf '#!/usr/bin/env bash\npharo-vm Pharo.image "$@"' > /opt/pharo/pharo; \
+  ln -s /opt/pharo/pharo /usr/local/bin/pharo; \
+  chmod a+x /usr/local/bin/pharo; \
+  chown 7431:100 /opt/pharo -R; \
+  true
+COPY --from=download-image --chown=pharo:users /tmp/pharo-images /opt/pharo/
+RUN chmod a+w /opt/pharo
+USER pharo
