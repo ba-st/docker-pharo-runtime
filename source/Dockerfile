@@ -16,7 +16,7 @@ LABEL maintainer="Buenos Aires Smalltalk <github@fast.org.ar>"
 WORKDIR /opt/pharo
 USER root
 RUN set -eu; \
-  printf '#!/usr/bin/env bash\npharo-vm Pharo.image "$@"' > /opt/pharo/pharo; \
+  printf '#!/usr/bin/env bash\nexec pharo-vm Pharo.image "$@"' > /opt/pharo/pharo; \
   ln -s /opt/pharo/pharo /usr/local/bin/pharo; \
   chmod a+x /usr/local/bin/pharo; \
   chown 7431:100 /opt/pharo -R; \
