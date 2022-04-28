@@ -39,3 +39,17 @@ jobs:
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
+      - name: Docker meta loader
+        id: docker_meta_loader
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/pharo-loader
+      - name: Docker build and push loader
+        uses: docker/build-push-action@v2
+        with:
+          context: ./source
+          file: ./source/Dockerfile-loader
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.docker_meta_loader.outputs.tags }}
+          labels: ${{ steps.docker_meta_loader.outputs.labels }}
+          secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
