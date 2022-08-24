@@ -46,6 +46,7 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/pharo-loader
       - name: Docker build and push loader
         uses: docker/build-push-action@v3
+        if: ${{ github.event_name != 'pull_request' }}
         with:
           context: ./source
           file: ./source/Dockerfile-loader
