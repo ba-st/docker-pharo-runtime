@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
       - name: Docker build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: ./source
           file: ./source/Dockerfile
@@ -45,10 +45,11 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/pharo-loader
       - name: Docker build and push loader
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: ./source
           file: ./source/Dockerfile-loader
+          build-args: VERSION=${{ github.ref_name }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta_loader.outputs.tags }}
           labels: ${{ steps.docker_meta_loader.outputs.labels }}

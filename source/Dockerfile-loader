@@ -1,3 +1,4 @@
-FROM ghcr.io/ba-st/pharo:v10.0.1
+ARG VERSION=v10.0.1
+FROM ghcr.io/ba-st/pharo:$VERSION
 RUN pharo eval --save "EpMonitor current disable"
 RUN pharo eval --save "Iceberg remoteTypeSelector: #httpsUrl"
