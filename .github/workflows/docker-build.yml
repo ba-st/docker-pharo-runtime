@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Docker meta
-        id: docker_meta
+        id: docker_meta_runtime
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: ghcr.io/${{ github.repository_owner }}/pharo
@@ -36,8 +36,8 @@ jobs:
           context: ./source
           file: ./source/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.docker_meta.outputs.tags }}
-          labels: ${{ steps.docker_meta.outputs.labels }}
+          tags: ${{ steps.docker_meta_runtime.outputs.tags }}
+          labels: ${{ steps.docker_meta_runtime.outputs.labels }}
           secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
       - name: Docker meta loader
         id: docker_meta_loader
@@ -49,7 +49,7 @@ jobs:
         with:
           context: ./source
           file: ./source/Dockerfile-loader
-          build-args: VERSION=${{ github.action_ref }}
+          build-args: VERSION=${{ steps.docker_meta_runtime.outputs.version }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta_loader.outputs.tags }}
           labels: ${{ steps.docker_meta_loader.outputs.labels }}
