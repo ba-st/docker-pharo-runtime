@@ -1,4 +1,9 @@
+ARG BASE_IMAGE=ghcr.io/ba-st/pharo
 ARG VERSION=v10.0.1
-FROM ghcr.io/ba-st/pharo:$VERSION
+FROM $BASE_IMAGE:$VERSION
 RUN pharo eval --save "EpMonitor current disable"
+RUN pharo eval --save "EpMonitor current: (EpMonitor newWithLog: EpLog newNull)"
 RUN pharo eval --save "Iceberg remoteTypeSelector: #httpsUrl"
+RUN pharo eval --save "PharoCommandLineHandler forcePreferencesOmission: true"
+RUN pharo eval --save "NoChangesLog install"
+RUN pharo eval --save "MCCacheRepository uniqueInstance disable"
