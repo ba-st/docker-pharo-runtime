@@ -77,7 +77,7 @@ stop_compose docker-compose-pharo-date-multistage.yml
 print_success "Test #5 - Current date multistage...[OK]"
 
 print_info "Test #6 - Current date balanced"
-  docker-compose --file docker-compose-balanced-pharo-date.yml up --detach --scale date=3
+docker-compose --file docker-compose-balanced-pharo-date.yml up --detach --scale date=3
 sleep 5
 curl -f http://localhost
 print_success "OK"
