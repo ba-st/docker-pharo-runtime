@@ -78,5 +78,5 @@ run_in_compose_and_test_with_curl docker-compose-pharo-date-multistage.yml
 print_success "Test #5 - Current date multistage...[OK]"
 
 print_info "Test #6 - Current date balanced"
-run_in_compose_and_test_with_curl docker-compose-balanced-pharo-date.yml 5
+run_in_compose_and_test_with_curl docker-compose-balanced-pharo-date.yml 10
 print_success "Test #6 - Current date balanced...[OK]"
