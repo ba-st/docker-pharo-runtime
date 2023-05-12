@@ -3,17 +3,24 @@ services:
   date:
     image: pharo-date:sut
     labels:
-      traefik.port: 8080
-      traefik.frontend.rule: "HostRegexp:{catchall:.*}" # Match all requests
+      traefik.http.routers.date.entryPoints: web
+      traefik.http.routers.date.rule: HostRegexp(`{host:.+}`)
+      traefik.http.services.date.loadbalancer.server.port: 8080
     ulimits:
       rtprio:
         soft: 2
         hard: 2
+    deploy:
+      replicas: 3
+
   balancer:
-    # See https://docs.traefik.io/configuration/backends/docker/
-    image: traefik:v1.7
-    command: --docker --docker.watch
+    # See https://doc.traefik.io/traefik/providers/docker/
+    # See https://doc.traefik.io/traefik/reference/static-configuration/cli/
+    image: traefik:v2.10
+    command:
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
     ports:
       - "80:80"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro # Required because of docker backend, so traefik can get docker data.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
