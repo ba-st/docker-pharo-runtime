@@ -3,8 +3,8 @@ services:
   date:
     image: pharo-date:sut
     labels:
-      traefik.enable: 'true'
-      traefik.http.routers.date.rule: "HostRegexp:{catchall:.*}"
+      traefik.http.routers.date.entryPoints: web
+      traefik.http.routers.date.rule: HostRegexp(`{host:.+}`)
       traefik.http.services.date.loadbalancer.server.port: 8080
     ulimits:
       rtprio:
@@ -14,11 +14,12 @@ services:
       replicas: 3
 
   balancer:
+    # See https://doc.traefik.io/traefik/providers/docker/
+    # See https://doc.traefik.io/traefik/reference/static-configuration/cli/
     image: traefik:v2.10
     command:
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"      
-      - "--entrypoints.web.address=:80"
+      - --providers.docker=true
+      - --entrypoints.web.address=:80
     ports:
       - "80:80"
     volumes:
