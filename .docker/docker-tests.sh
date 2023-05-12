@@ -43,6 +43,9 @@ run_in_compose_and_test_with_curl() {
 
 set -e
 
+print_info "Pulling dependencies"
+docker pull traefik:v2.10
+
 print_info "Building base image"
 docker build --tag pharo-runtime:sut ../source
 
@@ -78,5 +81,5 @@ run_in_compose_and_test_with_curl docker-compose-pharo-date-multistage.yml
 print_success "Test #5 - Current date multistage...[OK]"
 
 print_info "Test #6 - Current date balanced"
-run_in_compose_and_test_with_curl docker-compose-balanced-pharo-date.yml 10
+run_in_compose_and_test_with_curl docker-compose-balanced-pharo-date.yml 5
 print_success "Test #6 - Current date balanced...[OK]"
