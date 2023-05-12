@@ -13,7 +13,7 @@ services:
       replicas: 3
   balancer:
     # See https://docs.traefik.io/configuration/backends/docker/
-    image: traefik:v1.7
+    image: traefik:v2.10
     command: --docker --docker.watch
     ports:
       - "80:80"
