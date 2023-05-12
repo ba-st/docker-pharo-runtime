@@ -24,12 +24,12 @@ print_success() {
 }
 
 run_in_compose() {
-  docker-compose --file "$1" up --abort-on-container-exit 
+  docker compose --file "$1" up --abort-on-container-exit 
   stop_compose "$1"
 }
 
 stop_compose() {
-  docker-compose --file "$1" down || docker-compose --file "$1" kill  
+  docker compose --file "$1" down || docker compose --file "$1" kill  
 }
 
 set -e
@@ -61,7 +61,7 @@ print_info "Building pharo-date image"
 docker build --tag pharo-date:sut pharo-date-multistage
 
 print_info "Test #4 - Current date"
-docker-compose --file docker-compose-pharo-date.yml up --detach
+docker compose --file docker-compose-pharo-date.yml up --detach
 sleep 1
 curl -f http://localhost:8080
 print_success "OK"
@@ -69,7 +69,7 @@ stop_compose docker-compose-pharo-date.yml
 print_success "Test #4 - Current date ...[OK]"
 
 print_info "Test #5 - Current date multistage"
-docker-compose --file docker-compose-pharo-date-multistage.yml up --detach
+docker compose --file docker-compose-pharo-date-multistage.yml up --detach
 sleep 1
 curl -f http://localhost:8081
 print_success "OK"
@@ -77,7 +77,7 @@ stop_compose docker-compose-pharo-date-multistage.yml
 print_success "Test #5 - Current date multistage...[OK]"
 
 print_info "Test #6 - Current date balanced"
-docker-compose --file docker-compose-balanced-pharo-date.yml up --detach --scale date=3
+docker compose --file docker-compose-balanced-pharo-date.yml up --detach --scale date=3
 sleep 5
 curl -f http://localhost
 print_success "OK"
