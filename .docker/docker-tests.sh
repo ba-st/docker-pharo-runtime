@@ -47,10 +47,10 @@ print_info "Pulling dependencies"
 docker pull traefik:v2.10
 
 print_info "Building base image"
-docker build --tag pharo-runtime:sut ../source
+docker buildx build --tag pharo-runtime:sut ../source
 
 print_info "Building loader base image"
-docker build \
+docker buildx build \
   --build-arg BASE_IMAGE=pharo-runtime \
   --build-arg VERSION=sut \
   --tag pharo-loader:sut \
