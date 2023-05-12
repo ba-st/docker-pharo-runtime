@@ -1,5 +1,5 @@
 ARG BASE_IMAGE=ghcr.io/ba-st/pharo
-ARG VERSION=v10.0.1
+ARG VERSION=v11.0.0
 FROM $BASE_IMAGE:$VERSION
 RUN pharo eval --save "EpMonitor current disable"
 RUN pharo eval --save "EpMonitor current: (EpMonitor newWithLog: EpLog newNull)"
