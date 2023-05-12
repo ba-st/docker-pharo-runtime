@@ -24,12 +24,21 @@ print_success() {
 }
 
 run_in_compose() {
-  docker compose --file "$1" up --abort-on-container-exit 
-  stop_compose "$1"
+  export COMPOSE_FILE=$1
+  docker compose up --abort-on-container-exit
+  docker compose down || docker compose kill
+  unset "$COMPOSE_FILE"
 }
 
-stop_compose() {
-  docker compose --file "$1" down || docker compose --file "$1" kill  
+run_in_compose_and_test_with_curl() {
+  export COMPOSE_FILE=$1
+  local SLEEP=${2:-1} # Default to 1 second
+  docker compose up --detach
+  sleep "$SLEEP"
+  curl -f http://localhost
+  print_success "OK"
+  docker compose down || docker compose kill
+  unset "$COMPOSE_FILE"
 }
 
 set -e
@@ -43,7 +52,7 @@ docker build \
   --build-arg VERSION=sut \
   --tag pharo-loader:sut \
   --file ../source/Dockerfile-loader \
-  ../source 
+  ../source
 
 print_info "Test #1 - Evaluating code"
 run_in_compose docker-compose-eval.yml
@@ -61,25 +70,13 @@ print_info "Building pharo-date image"
 docker build --tag pharo-date:sut pharo-date-multistage
 
 print_info "Test #4 - Current date"
-docker compose --file docker-compose-pharo-date.yml up --detach
-sleep 1
-curl -f http://localhost:8080
-print_success "OK"
-stop_compose docker-compose-pharo-date.yml
+run_in_compose_and_test_with_curl docker-compose-pharo-date.yml
 print_success "Test #4 - Current date ...[OK]"
 
 print_info "Test #5 - Current date multistage"
-docker compose --file docker-compose-pharo-date-multistage.yml up --detach
-sleep 1
-curl -f http://localhost:8081
-print_success "OK"
-stop_compose docker-compose-pharo-date-multistage.yml
+run_in_compose_and_test_with_curl docker-compose-pharo-date-multistage.yml
 print_success "Test #5 - Current date multistage...[OK]"
 
 print_info "Test #6 - Current date balanced"
-docker compose --file docker-compose-balanced-pharo-date.yml up --detach --scale date=3
-sleep 5
-curl -f http://localhost
-print_success "OK"
-stop_compose docker-compose-balanced-pharo-date.yml
+run_in_compose_and_test_with_curl docker-compose-balanced-pharo-date.yml 5
 print_success "Test #6 - Current date balanced...[OK]"

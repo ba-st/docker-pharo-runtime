@@ -9,6 +9,8 @@ services:
       rtprio:
         soft: 2
         hard: 2
+    deploy:
+      replicas: 3
   balancer:
     # See https://docs.traefik.io/configuration/backends/docker/
     image: traefik:v1.7
