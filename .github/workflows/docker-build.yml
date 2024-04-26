@@ -16,6 +16,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      # Build and publihs runtime image
       - name: Docker meta
         id: docker_meta_runtime
         uses: docker/metadata-action@v5
@@ -39,6 +40,22 @@ jobs:
           tags: ${{ steps.docker_meta_runtime.outputs.tags }}
           labels: ${{ steps.docker_meta_runtime.outputs.labels }}
           secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          image-ref: ghcr.io/${{ github.repository_owner }}/pharo:${{ github.ref_name }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
+          ignore-unfixed: true
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          sarif_file: 'trivy-results.sarif'
+      # Build and publish loader image
       - name: Docker meta loader
         id: docker_meta_loader
         uses: docker/metadata-action@v5
@@ -55,3 +72,19 @@ jobs:
           tags: ${{ steps.docker_meta_loader.outputs.tags }}
           labels: ${{ steps.docker_meta_loader.outputs.labels }}
           secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          image-ref: ghcr.io/${{ github.repository_owner }}/pharo-loader:${{ github.ref_name }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
+          ignore-unfixed: true
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          sarif_file: 'trivy-results.sarif'
+
