@@ -58,6 +58,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         with:
           sarif_file: 'trivy-results.sarif'
+          category: ghcr.io/${{ github.repository_owner }}/pharo:${{ github.ref_name }}
       # Build and publish loader image
       - name: Docker meta loader
         id: docker_meta_loader
