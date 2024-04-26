@@ -11,11 +11,15 @@ on:
 
 jobs:
    build_and_publish:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
     runs-on: ubuntu-latest
     name: Build and Publish Docker images
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      # Build and publish runtime image
       - name: Docker meta
         id: docker_meta_runtime
         uses: docker/metadata-action@v5
@@ -39,6 +43,23 @@ jobs:
           tags: ${{ steps.docker_meta_runtime.outputs.tags }}
           labels: ${{ steps.docker_meta_runtime.outputs.labels }}
           secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          image-ref: ghcr.io/${{ github.repository_owner }}/pharo:${{ github.ref_name }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
+          ignore-unfixed: true
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          sarif_file: 'trivy-results.sarif'
+          category: ghcr.io/${{ github.repository_owner }}/pharo:${{ github.ref_name }}
+      # Build and publish loader image
       - name: Docker meta loader
         id: docker_meta_loader
         uses: docker/metadata-action@v5
@@ -55,3 +76,19 @@ jobs:
           tags: ${{ steps.docker_meta_loader.outputs.tags }}
           labels: ${{ steps.docker_meta_loader.outputs.labels }}
           secrets: GIT_AUTH_TOKEN=${{ secrets.DOCKER_REGISTRY_TOKEN }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          image-ref: ghcr.io/${{ github.repository_owner }}/pharo-loader:${{ github.ref_name }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
+          ignore-unfixed: true
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: ${{ github.event_name != 'pull_request' }}
+        with:
+          sarif_file: 'trivy-results.sarif'
+          category: ghcr.io/${{ github.repository_owner }}/pharo-loader:${{ github.ref_name }}
