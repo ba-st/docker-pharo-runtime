@@ -1,6 +1,6 @@
 FROM pharo-loader:sut as loader
 
-RUN pharo metacello install github://zeroflag/Teapot:v2.6.0 BaselineOfTeapot --groups=Deployment
+RUN pharo metacello install github://ba-st-dependencies/Teapot:v2 BaselineOfTeapot --groups=Deployment
 
 FROM pharo-runtime:sut
 WORKDIR /app
