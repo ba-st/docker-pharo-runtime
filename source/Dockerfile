@@ -11,7 +11,7 @@ RUN set -eu; \
   true
 
 # Copy Pharo Image into base image
-FROM ghcr.io/ba-st/pharo-vm:v10.2.0 as image
+FROM ghcr.io/ba-st/pharo-vm:v10.3.0 AS image
 LABEL org.opencontainers.image.authors="Buenos Aires Smalltalk <github@fast.org.ar>"
 WORKDIR /opt/pharo
 USER root
