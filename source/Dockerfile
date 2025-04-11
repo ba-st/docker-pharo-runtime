@@ -2,7 +2,7 @@
 FROM alpine:3 as download-image
 RUN apk add unzip
 WORKDIR /tmp/pharo-images
-ADD https://files.pharo.org/image/110/Pharo11-SNAPSHOT.build.689.sha.8986777.arch.64bit.zip ./PharoImage.zip
+ADD https://files.pharo.org/image/120/Pharo12.0-SNAPSHOT.build.1570.sha.3dafb8a476.arch.64bit.zip ./PharoImage.zip
 RUN set -eu; \
   unzip PharoImage.zip; \
   rm PharoImage.zip; \
@@ -11,7 +11,7 @@ RUN set -eu; \
   true
 
 # Copy Pharo Image into base image
-FROM ghcr.io/ba-st/pharo-vm:v10.3.0 AS image
+FROM ghcr.io/ba-st/pharo-vm:v10.3.4 AS image
 LABEL org.opencontainers.image.authors="Buenos Aires Smalltalk <github@fast.org.ar>"
 WORKDIR /opt/pharo
 USER root
