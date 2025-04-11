@@ -15,7 +15,7 @@
 ## Quick start
 
 ```bash
-docker run -it ghcr.io/ba-st/pharo:v11.0.0 pharo --version
+docker run -it ghcr.io/ba-st/pharo:v12.0.1 pharo --version
 ```
 
 ## License
