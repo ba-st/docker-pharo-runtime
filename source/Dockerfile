@@ -2,7 +2,7 @@
 FROM alpine:3 AS download-image
 RUN apk add unzip
 WORKDIR /tmp/pharo-images
-ADD https://files.pharo.org/image/120/Pharo12.0-SNAPSHOT.build.1570.sha.3dafb8a476.arch.64bit.zip ./PharoImage.zip
+ADD https://files.pharo.org/image/130/Pharo13.0-SNAPSHOT.build.670.sha.bf9ccb52ed.arch.64bit.zip ./PharoImage.zip
 RUN set -eu; \
   unzip PharoImage.zip; \
   rm PharoImage.zip; \
