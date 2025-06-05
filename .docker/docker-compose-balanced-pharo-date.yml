@@ -1,4 +1,3 @@
-version: '3.4'
 services:
   date:
     image: pharo-date:sut
