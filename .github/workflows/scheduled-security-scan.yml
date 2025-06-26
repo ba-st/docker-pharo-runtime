@@ -18,6 +18,7 @@ jobs:
           - v11.0.0
           - v12.0.1
           - v13.0.0
+          - v13.1.0
     name: Scheduled scan for vulnerabilities ${{ matrix.version }}
     runs-on: ubuntu-latest
     steps:
